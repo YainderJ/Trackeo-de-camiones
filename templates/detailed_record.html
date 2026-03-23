@@ -1,26 +1,26 @@
 {% extends "base.html" %}
     {% block content %}
-        <h3 class="light-blue-text text-darken-4 center-align text-shadow">Service Record</h3>
+        <h3 class="light-blue-text text-darken-4 center-align text-shadow">Detalles del Registro</h3>
         
         <div class="row">
             <div class="col s12 m12 l6 offset-l3">
                 <div class="row">
                     <div class="col s12 m4">
                         <div class="card-panel grey lighten-5 detailed_info_card">
-                            <h5 class="light-blue-text"><i class="fas fa-bars light-blue-text prefix"></i> Record Info</h5>
-                            <p> <strong class="light-blue-text text-darken-2">User ID </strong>{{ record.username }}</p>
-                            <p><strong class="light-blue-text text-darken-2">Date </strong> {{ record.service_date }}</p>
-                            <p><strong class="light-blue-text text-darken-2">Cost </strong> € {{ record.service_cost }}</p>
+                            <h5 class="light-blue-text"><i class="fas fa-bars light-blue-text prefix"></i> Detalles del Registro</h5>
+                            <p> <strong class="light-blue-text text-darken-2">Usuario: </strong>{{ record.username }}</p>
+                            <p><strong class="light-blue-text text-darken-2">Fecha: </strong> {{ record.service_date }}</p>
+                            <p><strong class="light-blue-text text-darken-2">Costo: </strong> € {{ record.service_cost }}</p>
                             {% if record.service_paid == "yes" %}
-                                <p><strong class="light-blue-text text-darken-2">Service Paid </strong></p>
+                                <p><strong class="light-blue-text text-darken-2">Servicio Pagado </strong></p>
                             {% else %}
-                                <p><strong class="red-text text-darken-2">Service Unpaid </strong></p>
+                                <p><strong class="red-text text-darken-2">Servicio No Pagado </strong></p>
                             {% endif %}
                         </div>
                     </div>
                     <div class="col s12 m4">
                         <div class="card-panel grey lighten-5 detailed_info_card">
-                            <h5 class="light-blue-text"><i class="fas fa-car light-blue-text prefix"></i> Car</h5>
+                            <h5 class="light-blue-text"><i class="fas fa-car light-blue-text prefix"></i> Camión</h5>
                             <p> {{ record.car_make }} {{ record.car_model }}</p>
                             <p>{{ record.reg_no }}</p>
                             <p>{{ record.odometer_reading }} <strong class="light-blue-text text-darken-2">Km</strong></p>
@@ -29,7 +29,7 @@
                     </div>
                     <div class="col s12 m4">
                         <div class="card-panel grey lighten-5 detailed_info_card">
-                            <h5 class="light-blue-text"><i class="fas fa-warehouse light-blue-text prefix"></i> Garage</h5>
+                            <h5 class="light-blue-text"><i class="fas fa-warehouse light-blue-text prefix"></i> Taller</h5>
                             <p> {{ record.garage_name }}</p>
                             <p>{{ record.garage_contact }}</p>
                             <p>{{ record.garage_phone }}</p>
@@ -39,22 +39,22 @@
                     <div class="row detailed_info_row">
                         <div class="col s12 s12">
                             <div class="card-panel grey lighten-5 detailed_info_card">
-                                <h5 class="light-blue-text"><i class="fas fa-info light-blue-text"></i> Service Info</h5>
+                                <h5 class="light-blue-text"><i class="fas fa-info light-blue-text"></i> Resumen del Trabajo</h5>
                                 <p>
                                     {{ record.service_desc }}
                                 </p>
-                                <h6 class="light-blue-text"><i class="fas fa-list light-blue-text"></i> Service Items</h6>
+                                <h6 class="light-blue-text"><i class="fas fa-list light-blue-text"></i> Repuestos / Servicios</h6>
                                 <ol>
                                     {% if record.service_items|length >= 1 %}
                                         {% for item in record.service_items %}
                                             {% if item|length >= 1 %}
                                                 <li>{{ item }}</li>
                                             {% else %}
-                                                <p>No details provided</p>
+                                                <p>No se proporcionaron detalles</p>
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}
-                                            <p>No details provided</p>
+                                            <p>No se proporcionaron detalles</p>
                                     {% endif %}
                                 </ol>
                             </div>
@@ -62,20 +62,20 @@
                     </div>
                     <div class="row">
                             <div class="col s4 m4 center-align">
-                                <a href="{{ url_for('tracker') }}" class="btn light-blue darken-2 btn-rounded detailed_record_button">Return</a>
+                                <a href="{{ url_for('tracker') }}" class="btn light-blue darken-2 btn-rounded detailed_record_button">Regresar</a>
                             </div>
                             <div class="col s4 m4 center-align">
-                                <a href="{{ url_for('edit_record', record_id=record._id) }}" class="waves-effect light-blue darken-2 waves-light btn detailed_record_button">Edit</a>
+                                <a href="{{ url_for('edit_record', record_id=record._id) }}" class="waves-effect light-blue darken-2 waves-light btn detailed_record_button">Editar</a>
                             </div>
                             <div class="col s4 m4 center-align">
-                                <button data-target="modal1" class="btn modal-trigger detailed_record_button red red_buttom">Delete</button>
+                                <button data-target="modal1" class="btn modal-trigger detailed_record_button red red_buttom">Eliminar</button>
                             </div>
                     </div>
                     <!-- Confirm deletion modal -->
                     <div id="modal1" class="modal">
                         <div class="modal-content center-align">
-                        <h4 class="light-blue-text text-darken-4 text-shadow">Confirm Deletion</h4>
-                        <p>Are you sure you want to delete the record?</p>
+                        <h4 class="light-blue-text text-darken-4 text-shadow">Confirmar Eliminación</h4>
+                        <p>¿Estás seguro de que quieres eliminar este registro?</p>
                           <a href="#!" class="modal-close btn red confirmation_red_buttom">No</a>
                         <a href="{{ url_for('delete_record', record_id=record._id) }}" class="modal-close btn green light-blue darken-2">Yes</a>
                     </div>

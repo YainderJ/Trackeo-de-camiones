@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <h3 class="light-blue-text text-darken-4 center-align text-shadow">Edit Record</h3>
+    <h3 class="light-blue-text text-darken-4 center-align text-shadow">Editar Registro</h3>
     <div class="row">
         <form class="col s12 m10 offset-m1 l6 offset-l3" method="POST"
             action="{{ url_for('edit_record', record_id=record._id) }}">
@@ -8,7 +8,7 @@
                 <div class="input-field col s12">
                     <i class="fas fa-bars prefix light-blue-text"></i>
                     <select id="reg_no" name="reg_no" class="validate select_car" required>
-                        <option value="" disabled>Choose Car</option>
+                        <option value="" disabled>Elegir Camión</option>
                             {% for car in cars %}
                                 {% if car.reg_no == record.reg_no %}
                                     <option value="{{ car.reg_no }}" selected>{{ car.reg_no }}</option>
@@ -22,7 +22,7 @@
                 <div class="input-field col s12">
                     <i class="fas fa-bars prefix light-blue-text"></i>
                     <select id="garage_name" name="garage_name" class="validate" required>
-                        <option value="" disabled>Garage / Service Center</option>
+                        <option value="" disabled>Taller Mecánico</option>
                             {% for gar in garages %}
                                 {% if gar.garage_name == record.garage_name %}
                                     <option value="{{ gar.garage_name }}" selected>{{ gar.garage_name }}</option>
@@ -37,19 +37,19 @@
             <div class="row">
                 <div class="input-field col s6">
                     <i class="fas fa-calendar-alt prefix light-blue-text"></i>
-                    <input placeholder="Service Date" id="service_date" name="service_date" type="text"
+                    <input placeholder="Fecha de Servicio" id="service_date" name="service_date" type="text"
                         class="datepicker validate" value="{{ record.service_date }}">
                     <label for="servicedate" class="light-blue-text">Date</label>
                 </div>
                 <div class="input-field col s6">
                     <i class="fas fa-tachometer-alt prefix light-blue-text"></i>
-                    <input placeholder="Odometer Reading" id="odometer_reading" name="odometer_reading" type="number"
+                    <input placeholder="Lectura del odómetro" id="odometer_reading" name="odometer_reading" type="number"
                         class="validate" value="{{ record.odometer_reading }}">
                     <label for="odometer_reading" class="light-blue-text">Odometer Reading (Km)</label>
                 </div>
                 <div class="input-field col s6">
                     <i class="fas fa-euro-sign prefix light-blue-text"></i>
-                    <input placeholder="Cost (No € symbol)" id="service_cost" name="service_cost" type="number" step=".01"
+                    <input placeholder="Costo (Sin símbolo €)" id="service_cost" name="service_cost" type="number" step=".01"
                         class="validate" value="{{ record.service_cost }}">
                     <label for="service_cost" class="light-blue-text">Service Cost</label>
                 </div>
@@ -73,49 +73,49 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-sticky-note prefix light-blue-text"></i>
-                    <textarea placeholder="Provided short description of the work carried out." id="service_desc"
+                    <textarea placeholder="Proporciona una breve descripción del trabajo realizado." id="service_desc"
                         name="service_desc" class="materialize-textarea">{{ record.service_desc }}</textarea>
-                    <label for="service_desc" class="light-blue-text">Service Work - Summary</label>
+                    <label for="service_desc" class="light-blue-text">Resumen del Trabajo</label>
                 </div>
             </div>
     
             <div class="row">
                 <div class="col s10 offset-s1">
-                    <h6 class="fas fa-list light-blue-text list_icon"> Add detailed list of service items.</h6>
+                    <h6 class="fas fa-list light-blue-text list_icon"> Añadir lista detallada de repuestos/servicios.</h6>
                 </div>
     
                 <div class="input-field col s10 offset-s1 item">
                     {% if record.service_items|length >= 1 %}
                         {% for item in record.service_items %}
                             {% if item|length >= 1 %}
-                                <input placeholder="Add service line item" id="service_items" name="service_items" type="text"
+                                <input placeholder="Añadir repuesto o servicio" id="service_items" name="service_items" type="text"
                                     class="validate black-text addtional_line" value="{{ item }}"><label for="service_items"></label>
                             {% else %}
-                                <input placeholder="Add service line item" id="service_items" name="service_items" type="text"
+                                <input placeholder="Añadir repuesto o servicio" id="service_items" name="service_items" type="text"
                                     class="validate black-text"><label for="service_items"></label>
                             {% endif %}
                         {% endfor %}
                         {% else %}
-                            <input placeholder="Add service line item" id="service_items" name="service_items" type="text"
+                            <input placeholder="Añadir repuesto o servicio" id="service_items" name="service_items" type="text"
                                 class="validate black-text"><label for="service_items"></label>
                     {% endif %}
                 </div>
                 <div class="row">
                     <div class="col s6 offset-m1 m4 offset-m1 l6 offset-l1">
                         <i role="button" class="far fa-plus-square add_item light-blue-text item_button"
-                            aria-label="Add Service Item"></i>
+                            aria-label="Añadir Repuesto"></i>
                         <i role="button" class="far fa-minus-square red-text remove_item_edit item_button"
-                            aria-label="Remove Service Item"></i>
+                            aria-label="Eliminar Repuesto"></i>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s4 offset-s1 m4 offset-m1 l4 offset-l1">
                         <a href="{{ url_for('detailed_record', record_id=record._id) }}"
-                            class="btn light-blue darken-2 edit_record_button">Return</a>
+                            class="btn light-blue darken-2 edit_record_button">Regresar</a>
                     </div>
                     <div class="col s4 offset-s1 m4 offset-m1 l4 offset-l1">
                         <button type="submit" class="btn light-blue darken-2 edit_record_button">
-                            Save
+                            Guardar
                         </button>
                     </div>
                 </div>

@@ -29,15 +29,15 @@ def login():
                 user["password"], request.form.get
                     ("password")):
                 session["user"] = request.form.get("username").lower()
-                flash("Welcome, {}".format(request.form.get("username")))
+                flash("Bienvenido, {}".format(request.form.get("username")))
                 return redirect(url_for(
                     "userprofile", username=session["user"]))
             else:
-                flash("Incorrect Username and/or Password")
+                flash("Usuario y/o contraseña incorrectos")
                 return redirect(url_for("login"))
         else:
             # username doesn't exist
-            flash("Incorrect Username and/or Password")
+            flash("Usuario y/o contraseña incorrectos")
             return redirect(url_for("login"))
     return render_template("login.html")
 
@@ -58,16 +58,16 @@ def tracker():
             return render_template(
                 "tracker.html", logs=logs, user_cars=user_cars)
 
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
-@app.route("/detailed_record<record_id>")
+@app.route("/detailed_record/<record_id>")
 def detailed_record(record_id):
     if session:
         record = mongo.db.maintenance.find_one({"_id": ObjectId(record_id)})
         return render_template("detailed_record.html", record=record)
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
@@ -91,7 +91,7 @@ def register():
         mongo.db.directory.insert_one(register)
 
         session["user"] = request.form.get("username").lower()
-        flash("Registration Successful!")
+        flash("¡Registro exitoso!")
         return redirect(url_for("userprofile", username=session["user"]))
     return render_template("register.html")
 
@@ -110,7 +110,7 @@ def userprofile(username):
                 "userprofile.html", username=username, name=name, email=email)
 
         return redirect(url_for("login"))
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
@@ -155,12 +155,12 @@ def add_record():
         garages = mongo.db.garage.find(
             {"garage_status": "active"}).sort("garage_name", 1)
         return render_template("add_record.html", cars=cars, garages=garages)
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
 # edit a maintenance record.
-@app.route("/edit_record<record_id>", methods=["GET", "POST"])
+@app.route("/edit_record/<record_id>", methods=["GET", "POST"])
 def edit_record(record_id):
     if session:
         if request.method == "POST":
@@ -196,7 +196,7 @@ def edit_record(record_id):
                 {"_id": ObjectId(record_id)}, edit_details)
             record = mongo.db.maintenance.find_one(
                 {"_id": ObjectId(record_id)})
-            flash("Record Updated")
+            flash("Registro Actualizado")
             return render_template("detailed_record.html", record=record)
 
         record = mongo.db.maintenance.find_one({"_id": ObjectId(record_id)})
@@ -209,7 +209,7 @@ def edit_record(record_id):
         return render_template(
             "edit_record.html", cars=cars, garages=garages, record=record)
 
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
@@ -239,10 +239,10 @@ def addcar(username):
                 "model": request.form.get("model")
             }
             mongo.db.cars.insert_one(car_details)
-            flash("Your car has been added to the database")
+            flash("Tu camión ha sido añadido a la base de datos")
 
         return render_template("addcar.html", username=username, email=email)
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
@@ -250,7 +250,7 @@ def addcar(username):
 @app.route("/delete_record/<record_id>")
 def delete_record(record_id):
     mongo.db.maintenance.remove({"_id": ObjectId(record_id)})
-    flash("Record has been removed from the DB.")
+    flash("Registro ha sido eliminado de la base de datos.")
     return redirect(url_for("tracker"))
 
 
@@ -263,7 +263,7 @@ def add_garage():
                 {"garage_name": request.form.get("garage_name")})
 
             if garage_exists:
-                flash("A garage with this name already exists in the DB")
+                flash("Ya existe un Taller con este nombre en la base de datos")
                 return redirect(url_for("add_garage"))
 
             garage_details = {
@@ -273,12 +273,12 @@ def add_garage():
                 "garage_status": "active"
                 }
             mongo.db.garage.insert_one(garage_details)
-            flash("Garage details added to the DB")
+            flash("Detalles del Taller añadidos a la base de datos")
             return redirect(url_for("add_garage"))
 
         lst_garages = mongo.db.garage.find().sort("garage_name", 1)
         return render_template("add_garage.html", lst_garages=lst_garages)
-    flash("Login to site required")
+    flash("Inicio de sesión requerido")
     return redirect(url_for("login"))
 
 
@@ -287,7 +287,7 @@ def add_garage():
 def deactivate_garage(garage_id):
     mongo.db.garage.update(
         {"_id": ObjectId(garage_id)}, {"$set": {"garage_status": "inactive"}})
-    flash("Selected garage set to inactive")
+    flash("El taller seleccionado se ha marcado como inactivo")
     return redirect(url_for("add_garage"))
 
 
@@ -296,7 +296,7 @@ def deactivate_garage(garage_id):
 def activate_garage(garage_id):
     mongo.db.garage.update(
         {"_id": ObjectId(garage_id)}, {"$set": {"garage_status": "active"}})
-    flash("Selected garage set to active")
+    flash("El taller seleccionado se ha marcado como activo")
     return redirect(url_for("add_garage"))
 
 # end add garage
@@ -306,7 +306,7 @@ def activate_garage(garage_id):
 
 @app.route("/logout")
 def logout():
-    flash("You have been logged out")
+    flash("Has cerrado sesión")
     session.pop("user", None)
     return redirect(url_for("login"))
 
