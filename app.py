@@ -307,7 +307,7 @@ def activate_garage(garage_id):
 @app.route("/logout")
 def logout():
     flash("You have been logged out")
-    session.pop("user")
+    session.pop("user", None)
     return redirect(url_for("login"))
 
 

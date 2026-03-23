@@ -45,12 +45,12 @@ main {
 }
 
   #mobile-demo {
-    background-color: #004d40;
+    background-color: #0277bd;
 }
 
 /* -_-_-_-_-_-_-_-_-_-_ Buttons _-_-_-_-_-_-_-_-_-_- */
 .btn:hover{
-    background-color: #004d40 !important;
+    background-color: #0277bd !important;
 }
 .detailed_record_button{
     min-width: 80%;

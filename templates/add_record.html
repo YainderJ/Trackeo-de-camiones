@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-    <h3 class="teal-text text-darken-4 center-align text-shadow">Add New Maintenance Record</h3>
+    <h3 class="light-blue-text text-darken-4 center-align text-shadow">Add New Maintenance Record</h3>
     <div class="row">
         <form class="col s12 m10 offset-m1 l6 offset-l3" method="POST" action="{{ url_for('add_record') }}">
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="fas fa-bars prefix teal-text"></i>
+                    <i class="fas fa-bars prefix light-blue-text"></i>
                     <select id="reg_no" name="reg_no" class="validate select_car" required>
                         <option value="reg_no" disabled selected>Choose Car</option>
                         {% for car in cars %}
@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <div class="input-field col s12">
-                    <i class="fas fa-bars prefix teal-text"></i>
+                    <i class="fas fa-bars prefix light-blue-text"></i>
                     <select id="garage_name" name="garage_name" class="validate select_garage" required>
                         <option value="" disabled selected>Garage / Service Center</option>
                         {% for gar in garages %}
@@ -27,27 +27,27 @@
             </div>
             <div class="row">
                 <div class="input-field col s6">
-                    <i class="fas fa-calendar-alt prefix teal-text"></i>
+                    <i class="fas fa-calendar-alt prefix light-blue-text"></i>
                     <input placeholder="Service Date" id="service_date" name="service_date" type="text"
                         class="datepicker validate" required>
-                    <label for="servicedate" class="teal-text">Date</label>
+                    <label for="servicedate" class="light-blue-text">Date</label>
                 </div>
                 <div class="input-field col s6">
-                    <i class="fas fa-tachometer-alt prefix teal-text"></i>
+                    <i class="fas fa-tachometer-alt prefix light-blue-text"></i>
                     <input placeholder="Odometer Reading" id="odometer_reading" name="odometer_reading" type="number"
                         class="validate" required>
-                    <label for="odometer_reading" class="teal-text">Odometer Reading (Km)</label>
+                    <label for="odometer_reading" class="light-blue-text">Odometer Reading (Km)</label>
                 </div>
                 <div class="input-field col s6">
-                    <i class="fas fa-euro-sign prefix teal-text"></i>
+                    <i class="fas fa-euro-sign prefix light-blue-text"></i>
                     <input placeholder="Cost (No € symbol)" id="service_cost" name="service_cost" type="number" step=".01"
                         class="validate" required>
-                    <label for="service_cost" class="teal-text">Service Cost</label>
+                    <label for="service_cost" class="light-blue-text">Service Cost</label>
                 </div>
                 <div class="input-field col s6 center-align">
                     <div class="switch">
-                        <i class="fas fa-file-invoice prefix teal-text"></i>
-                        <label for="service_paid" class="teal-text">
+                        <i class="fas fa-file-invoice prefix light-blue-text"></i>
+                        <label for="service_paid" class="light-blue-text">
                             <input type="checkbox" id="service_paid" name="service_paid">
                             <span class="lever"></span>
                             Invoice Paid
@@ -57,16 +57,16 @@
             </div>
             <div class="row">
                 <div class="input-field col s12" required>
-                    <i class="fas fa-sticky-note prefix teal-text"></i>
+                    <i class="fas fa-sticky-note prefix light-blue-text"></i>
                     <textarea placeholder="Short description of work carried out." id="service_desc" name="service_desc"
                         class="materialize-textarea validate" required></textarea>
-                    <label for="service_desc" class="teal-text">Service Work - Summary</label>
+                    <label for="service_desc" class="light-blue-text">Service Work - Summary</label>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col s10 offset-s1">
-                    <h6 class="fas fa-list teal-text list_icon"> Add detailed list of service items.</h6>
+                    <h6 class="fas fa-list light-blue-text list_icon"> Add detailed list of service items.</h6>
                 </div>
                 <div class="input-field col s10 offset-s1 item">
                     <input placeholder="Add service line item" id="service_items" name="service_items" type="text"
@@ -75,7 +75,7 @@
                 </div>
                 <div class="row">
                     <div class="col s10 offset-s1">
-                        <i role="button" class="far fa-plus-square add_item teal-text item_button"
+                        <i role="button" class="far fa-plus-square add_item light-blue-text item_button"
                             aria-label="Add Service Item"></i>
                         <i role="button" class="far fa-minus-square red-text remove_item item_button"
                             aria-label="Remove Service Item"></i>
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <button type="Submit"
-                        class="col s8 offset-s2 m4 offset-m4 l4 offset-l4 btn teal darken-2 record_submit">
+                        class="col s8 offset-s2 m4 offset-m4 l4 offset-l4 btn light-blue darken-2 record_submit">
                         Add Record <i class="fas fa-plus"></i>
                     </button>
                 </div>
