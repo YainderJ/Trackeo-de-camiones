@@ -5,6 +5,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 if os.path.exists("env.py"):
     import env
 
@@ -310,6 +311,112 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
+# area de analítica - KPIs, filtros, etc.
+
+@app.route("/analytics", methods=["GET", "POST"])
+def analytics():
+    if session:
+        # 1. Preparar la consulta base (Query)
+        query = {}
+        if session["user"] != "admin":
+            query["username"] = session["user"]
+
+        # 2. Obtener listas para los selectores desplegables
+        if session["user"] == "admin":
+            user_cars = list(mongo.db.cars.find())
+        else:
+            user_cars = list(mongo.db.cars.find({"user": session["user"]}))
+        
+        garages = list(mongo.db.garage.find().sort("garage_name", 1))
+
+        # Variables iniciales para las fechas
+        start_date_str = None
+        end_date_str = None
+
+        # 3. Aplicar Filtros básicos si el usuario presionó "Aplicar Filtros"
+        if request.method == "POST":
+            reg_no = request.form.get("reg_no")
+            garage_name = request.form.get("garage_name")
+            service_paid = request.form.get("service_paid")
+            
+            start_date_str = request.form.get("start_date")
+            end_date_str = request.form.get("end_date")
+            
+            # Añadir a la búsqueda de MongoDB los filtros de texto exacto
+            if reg_no:
+                query["reg_no"] = reg_no
+            if garage_name:
+                query["garage_name"] = garage_name
+            if service_paid:
+                query["service_paid"] = service_paid
+
+        # 4. Buscar los registros en la base de datos
+        logs = list(mongo.db.maintenance.find(query).sort("service_date", -1))
+
+        # 4.5 Filtrar por rango de fechas (Matemática en Python)
+        if request.method == "POST" and (start_date_str or end_date_str):
+            filtered_logs = []
+            for log in logs:
+                try:
+                    # Convertir la fecha del registro (texto) a formato de fecha real
+                    log_date = datetime.strptime(log["service_date"], "%d, %B, %Y")
+                    
+                    valid_start = True
+                    valid_end = True
+
+                    # Comprobar si es mayor a la fecha de inicio
+                    if start_date_str:
+                        start_date = datetime.strptime(start_date_str, "%d, %B, %Y")
+                        if log_date < start_date:
+                            valid_start = False
+
+                    # Comprobar si es menor a la fecha de fin
+                    if end_date_str:
+                        end_date = datetime.strptime(end_date_str, "%d, %B, %Y")
+                        if log_date > end_date:
+                            valid_end = False
+
+                    # Si pasa las pruebas, se mantiene en la lista
+                    if valid_start and valid_end:
+                        filtered_logs.append(log)
+
+                except ValueError:
+                    # Si alguna fecha vieja está mal escrita en la BD, no borramos el registro
+                    filtered_logs.append(log)
+            
+            # Reemplazar la lista completa por la filtrada
+            logs = filtered_logs
+
+        # 5. Calcular los KPIs (Costos Totales, Deudas, Promedios)
+        total_gasto = 0
+        deuda_total = 0
+        
+        for log in logs:
+            try:
+                cost = float(log.get("service_cost", 0))
+            except ValueError:
+                cost = 0.0
+                
+            total_gasto += cost
+            
+            if log.get("service_paid") == "no":
+                deuda_total += cost
+        
+        # Calcular el promedio (evitando que dé error si no hay registros)
+        promedio_costo = total_gasto / len(logs) if len(logs) > 0 else 0
+
+        # 6. Enviar todo al archivo HTML
+        return render_template("analytics.html", 
+                               logs=logs, 
+                               user_cars=user_cars, 
+                               garages=garages,
+                               total_gasto=round(total_gasto, 2),
+                               deuda_total=round(deuda_total, 2),
+                               promedio_costo=round(promedio_costo, 2))
+
+    # Si no hay sesión iniciada, expulsar al login
+    flash("Inicio de sesión requerido")
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),

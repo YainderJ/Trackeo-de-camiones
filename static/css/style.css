@@ -226,3 +226,17 @@ main {
         padding-bottom: 10px !important;
     }
 }
+
+/* -_-_-_-_-_-_-_-_-_-_ Logo Empresa _-_-_-_-_-_-_-_-_-_- */
+.company-logo {
+    height: 40px; /* Ajusta este valor dependiendo de qué tan alto sea tu logo */
+    width: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media(min-width: 992px){
+    .company-logo {
+        height: 50px; /* Un poco más grande en computadoras */
+    }
+}

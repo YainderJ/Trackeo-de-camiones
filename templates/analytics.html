@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="light-blue-text text-darken-4 center-align text-shadow">Analíticas y Costos</h3>
+
+<div class="row">
+    <div class="col s12 m4">
+        <div class="card-panel green lighten-4 center-align">
+            <i class="fas fa-euro-sign fa-2x green-text text-darken-3"></i>
+            <h6 class="green-text text-darken-3"><strong>Gasto Total</strong></h6>
+            <h4 class="green-text text-darken-4">€ {{ total_gasto }}</h4>
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card-panel red lighten-4 center-align">
+            <i class="fas fa-file-invoice-dollar fa-2x red-text text-darken-3"></i>
+            <h6 class="red-text text-darken-3"><strong>Deuda (Por Pagar)</strong></h6>
+            <h4 class="red-text text-darken-4">€ {{ deuda_total }}</h4>
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card-panel blue lighten-4 center-align">
+            <i class="fas fa-calculator fa-2x blue-text text-darken-3"></i>
+            <h6 class="blue-text text-darken-3"><strong>Promedio por Servicio</strong></h6>
+            <h4 class="blue-text text-darken-4">€ {{ promedio_costo }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col s12 m10 offset-m1 card-panel grey lighten-5" method="POST" action="{{ url_for('analytics') }}">
+        <h5 class="light-blue-text text-darken-2"><i class="fas fa-filter"></i> Filtrar Analíticas</h5>
+        
+        <div class="row">
+            <div class="input-field col s12 m4">
+                <select id="reg_no" name="reg_no">
+                    <option value="" selected>Todos los Camiones</option>
+                    {% for car in user_cars %}
+                        <option value="{{ car.reg_no }}">{{ car.reg_no }} ({{ car.make }})</option>
+                    {% endfor %}
+                </select>
+                <label>Filtrar por Camión</label>
+            </div>
+            
+            <div class="input-field col s12 m4">
+                <select id="garage_name" name="garage_name">
+                    <option value="" selected>Todos los Talleres</option>
+                    {% for gar in garages %}
+                        <option value="{{ gar.garage_name }}">{{ gar.garage_name }}</option>
+                    {% endfor %}
+                </select>
+                <label>Filtrar por Taller</label>
+            </div>
+
+            <div class="input-field col s12 m4">
+                <select id="service_paid" name="service_paid">
+                    <option value="" selected>Todos los estados</option>
+                    <option value="yes">Pagados</option>
+                    <option value="no">Por Pagar</option>
+                </select>
+                <label>Estado de Factura</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12 m6">
+                <i class="fas fa-calendar-alt prefix light-blue-text"></i>
+                <input placeholder="Seleccionar inicio" id="start_date" name="start_date" type="text" class="datepicker">
+                <label for="start_date">Desde la fecha</label>
+            </div>
+            <div class="input-field col s12 m6">
+                <i class="fas fa-calendar-alt prefix light-blue-text"></i>
+                <input placeholder="Seleccionar fin" id="end_date" name="end_date" type="text" class="datepicker">
+                <label for="end_date">Hasta la fecha</label>
+            </div>
+        </div>
+
+        <div class="row center-align">
+            <button type="submit" class="btn light-blue darken-2">Aplicar Filtros <i class="fas fa-search"></i></button>
+            <a href="{{ url_for('analytics') }}" class="btn grey darken-1">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col s12 m10 offset-m1">
+        <h5 class="light-blue-text">Registros encontrados: {{ logs|length }}</h5>
+        <table class="striped responsive-table">
+            <thead class="light-blue darken-4 white-text">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Camión</th>
+                    <th>Taller</th>
+                    <th>Costo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.service_date }}</td>
+                    <td>{{ log.reg_no }}</td>
+                    <td>{{ log.garage_name }}</td>
+                    <td>€ {{ log.service_cost }}</td>
+                    <td>
+                        {% if log.service_paid == "yes" %}
+                            <span class="green-text">Pagado</span>
+                        {% else %}
+                            <span class="red-text"><strong>Deuda</strong></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
