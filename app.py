@@ -145,7 +145,10 @@ def add_record():
                 "garage_name": request.form.get("garage_name"),
                 "garage_contact": contact,
                 "garage_phone": phone,
-                "service_items": request.form.getlist("service_items")
+                "service_items": request.form.getlist("service_items"),
+                # NUEVOS CAMPOS:
+                "next_service_date": request.form.get("next_service_date"),
+                "next_service_note": request.form.get("next_service_note")
             }
 
             mongo.db.maintenance.insert_one(details)
@@ -190,7 +193,10 @@ def edit_record(record_id):
                 "garage_name": request.form.get("garage_name"),
                 "garage_contact": contact,
                 "garage_phone": phone,
-                "service_items": request.form.getlist("service_items")
+                "service_items": request.form.getlist("service_items"),
+                # NUEVOS CAMPOS:
+                "next_service_date": request.form.get("next_service_date"),
+                "next_service_note": request.form.get("next_service_note")
 
             }
             mongo.db.maintenance.update(
